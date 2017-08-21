@@ -12,12 +12,12 @@ library(scales)
 library(plotly)
 library(ggmap)
 library(shinydashboard)
-library(googleway)
+#library(googleway)
 library(dtplyr)
 source('key.R') # import the gmap API key from different R doc
 
 #import df
-df = readRDS('./www/201707-citibike-tripdata_df.rda')
+df = readRDS('./www/201707-citibike.rda')
 melt_df = readRDS('./www/201707-citibike-tripdata_melt.rda')
 dir_df = readRDS('./www/201707-citibike-tripdata_direction.rda')
 

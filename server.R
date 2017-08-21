@@ -1,4 +1,32 @@
+library(reshape2)
+library(plyr)
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(ggthemes)
+library(leaflet)
+library(shiny)
+library(googleVis)
+library(data.table)
+library(scales)
+library(plotly)
+library(ggmap)
 library(shinydashboard)
+library(googleway)
+library(dtplyr)
+
+source('key.R') # import the gmap API key from different R doc
+
+#import df
+df = readRDS('www/201707-citibike-tripdata_df.rda')
+melt_df = readRDS('C:/citibike-analysis/citibike/citishiny/201707-citibike-tripdata_melt.rda')
+dir_df = readRDS('C:/citibike-analysis/201707-citibike-tripdata_direction.rda')
+
+#import icons
+bike_icon = makeIcon('C:/citibike-analysis/bike_icon.png', iconWidth = 30, iconHeight = 35)
+
+library(shinydashboard)
+
 
 shinyServer(
   function(input, output, session) {
@@ -27,7 +55,6 @@ shinyServer(
       df
     })
     
-    
     tile_df = reactive({
       melt_df = melt_df[sample(nrow(melt_df),replace=F,size=0.1*nrow(melt_df)),]
       
@@ -37,7 +64,6 @@ shinyServer(
                          dayofweek == input$dayofweek_tile, 
                          time == switch(input$startstop_tile,'departing' = 'start','arriving' = 'stop'))
     })
-    
     observeEvent(input$start_map, {
       
       choices <- dir_df %>%
@@ -275,7 +301,7 @@ shinyServer(
                               destination = destination,
                               key = key)
       
-      print(paste(origin,destination))
+      print(paste(origin, destination))
       print(res)
       
       df_polyline = decode_pl(res$routes$overview_polyline$points)
@@ -319,5 +345,3 @@ shinyServer(
     
   }
 )
-
-
